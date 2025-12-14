@@ -1,0 +1,34 @@
+import openslidedata/
+└── sample_patches/
+    ├── benign/           # ० label
+    │   ├── nhrc_001.png
+    │   ├── nhrc_002.png
+    │   └── ... (50 samples)
+    └── malignant/         # १ label
+        ├── nhrc_101.png
+        ├── nhrc_102.png
+        └── ... (50 samples)
+import numpy as np
+from PIL import Image
+import os
+
+def extract_patches(slide_path, output_dir, label, num_patches=50):
+    slide = openslide.OpenSlide(slide_path)
+    width, height = slide.dimensions
+    
+    for i in range(num_patches):
+        # Random patch location (tissue area)
+        x = np.random.randint(5000, width-1024)
+        y = np.random.randint(5000, height-1024)
+        
+        patch = slide.read_region((x, y), 0, (1024, 1024))
+        patch = patch.convert('RGB')
+        
+        label_dir = os.path.join(output_dir, 'benign' if label == 0 else 'malignant')
+        os.makedirs(label_dir, exist_ok=True)
+        
+        patch.save(f"{label_dir}/nhrc_{100*label + i+1:03d}.png")
+
+# Usage (NHRC slides)
+extract_patches('nhrc_slide_001.svs', 'data/sample_patches/', 0, 50)  # Benign
+extract_patches('nhrc_slide_101.svs', 'data/sample_patches/', 1, 50)  # Malignant
