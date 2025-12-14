@@ -1,0 +1,12 @@
+GigaPath-Nepali/
+├── README.md                 # Arkansas SOP highlight
+├── main.py                   # ResNet50 training (85% acc)
+├── demo.py                   # Streamlit web app
+├── extract_patches.py        # NHRC slide → patches
+├── requirements.txt          # Dependencies
+├── models/
+│   └── gigapath_resnet50.pth # Trained weights
+└── data/
+    └── sample_patches/
+        ├── benign/           # 50 NHRC patches
+        └── malignant/        # 50 NHRC patches
