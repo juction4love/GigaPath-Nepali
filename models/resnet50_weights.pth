@@ -1,0 +1,27 @@
+# main.py मा automatic (No file needed)
+model = models.resnet50(pretrained=True)  # Downloads ~100MB automatically
+
+# Training पछि save (GitHub ready)
+torch.save(model.state_dict(), 'models/gigapath_resnet50.pth')
+torch.save(model, 'models/gigapath_resnet50_full.pth')  # Complete model
+models/
+
+Folder Structure (GitHub)
+├── gigapath_resnet50.pth      # Fine-tuned weights (~100MB)
+├── gigapath_resnet50_full.pth # Complete model (backup)
+└── baseline_imagenet.pth      # Optional pretrained copy
+GitHub Push (Large Files)
+
+# LFS for large models
+git lfs install
+git lfs track "*.pth"
+git add .gitattributes models/
+git add main.py requirements.txt data/
+git commit -m "v0.3 Complete prototype: ResNet50 trained on NHRC patches"
+git push origin main
+# demo.py मा
+model = models.resnet50(pretrained=False)
+model.fc = nn.Linear(model.fc.in_features, 2)
+model.load_state_dict(torch.load('models/gigapath_resnet50.pth'))
+model.eval()
+print("GigaPath-Nepali loaded! Ready for inference")
